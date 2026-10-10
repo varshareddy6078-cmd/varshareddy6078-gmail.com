@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Expense Tracker</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <header>
+        <h1>Personal Expense Tracker</h1>
+        <p>Track your money. Manage your future.</p>
+    </header>
+
+    <main>
+        <section class="summary">
+            <h2>Total Expenses</h2>
+            <p class="total">₹{{ "%.2f"|format(total) }}</p>
+        </section>
+
+        <section class="card">
+            <h2>Add a New Expense</h2>
+
+            <form action="/add" method="POST">
+                <label>Expense Name</label>
+                <input type="text" name="title"
+                       placeholder="e.g. Groceries" required>
+
+                <label>Category</label>
+                <select name="category" required>
+                    <option value="">Select category</option>
+                    <option>Food</option>
+                    <option>Travel</option>
+                    <option>Shopping</option>
+                    <option>Education</option>
+                    <option>Bills</option>
+                    <option>Health</option>
+                    <option>Other</option>
+                </select>
+
+                <label>Amount (₹)</label>
+                <input type="number" name="amount"
+                       min="0.01" step="0.01"
+                       placeholder="Enter amount" required>
+
+                <label>Date</label>
+                <input type="date" name="date" required>
+
+                <button type="submit">Add Expense</button>
+            </form>
+        </section>
+
+        <section class="card">
+            <h2>Expense History</h2>
+
+            {% if expenses %}
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for expense in expenses %}
+                            <tr>
+                                <td>{{ expense.title }}</td>
+                                <td>{{ expense.category }}</td>
+                                <td>₹{{ "%.2f"|format(expense.amount) }}</td>
+                                <td>{{ expense.date }}</td>
+                                <td>
+                                    <form action="/delete/{{ expense.id }}"
+                                          method="POST">
+                                        <button class="delete-btn"
+                                                type="submit">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="empty">No expenses yet. Add your first expense above!</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer>
+        <p>Personal Expense Tracker | Manage your money wisely</p>
+    </footer>
+
+</body>
+</html>
+ssssss
